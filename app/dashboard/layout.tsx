@@ -10,14 +10,14 @@ function layout({
   }>) {
   return (
     <div>
-        <div className='md:w-64 hidden md:block fixed'>
+        <div className=' md:w-64 hidden md:block fixed'>
             <SideNav/>
         </div>
-        <div className='md:ml-64'>
+        <div className=' md:ml-64 '>
        <Header/>
-        {children}
+       {children}
         </div>
-     
+        
     </div>
   )
 }
