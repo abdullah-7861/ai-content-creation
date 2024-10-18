@@ -5,15 +5,19 @@ import { Button } from "@/components/ui/button";
 
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Loader2Icon, LoaderIcon } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
 
 interface PROPS {
   selectedTemplate?: TEMPLATE;
   userFormInput: any;
+  loading: boolean;
 }
+
 // passing down parent funct as prop to fetch child property to parent
-function FormSection({ selectedTemplate, userFormInput }: PROPS) {
+
+function FormSection({ selectedTemplate, userFormInput, loading }: PROPS) {
   const [formData, setFormData] = useState<any>();
 
   const handleInputChange = (event: any) => {
@@ -24,7 +28,7 @@ function FormSection({ selectedTemplate, userFormInput }: PROPS) {
   const onSubmit = (e: any) => {
     e.preventDefault();
     // passing child property to the parent
-    userFormInput(formData); 
+    userFormInput(formData);
   };
 
   return (
@@ -58,7 +62,9 @@ function FormSection({ selectedTemplate, userFormInput }: PROPS) {
         <Button
           type="submit"
           className="bg-purple-700 w-full py-6 hover:bg-purple-600"
+          disabled={loading}
         >
+          {loading&&<Loader2Icon className="animate-spin"/>}
           Generate Content
         </Button>
       </form>

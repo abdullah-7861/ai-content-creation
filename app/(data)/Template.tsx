@@ -123,7 +123,7 @@ export default  [
         form: [
             {
                 label: 'Enter text to correct the grammer',
-                field: 'input',
+                field: 'textarea',
                 name: 'inputText',
                 required:true
             },
