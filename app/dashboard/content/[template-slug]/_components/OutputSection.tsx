@@ -12,8 +12,8 @@ function OutputSection({ AiOutput }: props) {
   const editorRef: any = useRef(); // using to get access to the the html componenet or element
 
   useEffect(() => {
-    const editorInstance = editorRef.current.getInstance();
-    editorInstance.setMarkdown(AiOutput); // putting value inside the output section
+    // const editorInstance = editorRef.current.getInstance();
+    // editorInstance.setMarkdown(AiOutput); // putting value inside the output section
   }, [AiOutput]);
 
   return (
@@ -25,6 +25,12 @@ function OutputSection({ AiOutput }: props) {
           <Copy className="w-4 h-4 mr-1" /> Copy
         </Button>
       </div>
+      <hr />
+      <div className="bg-white h-96 p-5">
+        {AiOutput}
+        
+      </div>
+{/* 
       <Editor
         ref={editorRef} // taking reference of <Editor/ > component to access
         initialValue="Your Result Will Appear Here"
@@ -34,7 +40,7 @@ function OutputSection({ AiOutput }: props) {
         onChange={() =>
           console.log(editorRef.current.getInstance().getMarkdown())
         }
-      />
+      /> */}
     </div>
   );
 }
