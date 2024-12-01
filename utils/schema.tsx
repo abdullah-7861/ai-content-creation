@@ -15,4 +15,11 @@ export const ResumeTable = pgTable("ResumeTable", {
   title: varchar("title").notNull(),
   createdBy: varchar("createdBy").notNull(),
   createdAt: varchar("createdAt"),
+  firstName: varchar("firstName"),
+  lastName: varchar("lastName"),
+  address: varchar("address"),
+  jobTitle: varchar("jobTitle"),
+  phone: varchar("phone"),
+  email: varchar("email"),
+  summary: varchar("summary"),
 });
