@@ -23,7 +23,7 @@ function ProfesionalExperienceSection({ resumeInfo }: any) {
               color:resumeInfo?.themeColor
           }}>{experience?.title}</h2>
             <h2 className="text-xs flex justify-between">{experience?.companyName},{experience?.city},{experience?.state}
-                <span>{experience?.startDate} {experience?.currenctlyWorking?'present':experience.endDate} </span>
+                <span>{experience?.startDate} - {experience?.currenctlyWorking?'present':experience.endDate} </span>
             </h2>
             <p className="text-xs my-2">
                 {experience?.workSummery}

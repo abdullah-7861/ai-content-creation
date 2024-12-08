@@ -15,7 +15,7 @@ export default{
             city:'New York',
             state:'NY',
             startDate:'Jan 2021',
-            endDate:'',
+            endDate:'Jan 2021',
             currentlyWorking:true,
             workSummery:' Designed, developed, and maintained full-stack applications using React and Node.js.\n'+
             '• Implemented responsive user interfaces with React, ensuring seamless user experiences across\n'+
@@ -27,7 +27,7 @@ export default{
         {
             id:2,
             title:'Frontend Developer',
-            companyName:'Google',
+            companyName:'Google', 
             city:'Charlotte',
             state:'NC',
             startDate:'May 2019',
@@ -65,22 +65,22 @@ export default{
         {
             id:1,
             name:'Angular',
-            rating:80,
+            rating:1,
         },
         {
             id:1,
             name:'React',
-            rating:100,
+            rating:2,
         },
         {
             id:1,
             name:'MySql',
-            rating:80,
+            rating:3,
         },
         {
             id:1,
             name:'React Native',
-            rating:100,
+            rating:4,
         }
     ]
 }

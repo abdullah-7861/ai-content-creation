@@ -3,6 +3,9 @@ import PersonalDetailForm from "./_forms/PersonalDetailForm";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, LayoutGrid } from "lucide-react";
 import SummaryForm from "./_forms/SummaryForm";
+import ExperienceForm from "./_forms/ExperienceForm";
+import EducationForm from "./_forms/EducationForm";
+import SkillForm from "./_forms/SkillForm";
 
 function FormSection() {
   const [activeFormIndex, setActiveFormIndex] = useState(2);
@@ -29,7 +32,9 @@ function FormSection() {
             disabled={!enableNext}
             className="flex gap-2 bg-purple-600 hover:bg-purple-500"
             size="sm"
-            onClick={() => setActiveFormIndex(activeFormIndex + 1)}
+            onClick={() => {
+              setEnableNext(false)
+              setActiveFormIndex(activeFormIndex + 1)}}
           >
             Next <ArrowRight />
           </Button>
@@ -38,8 +43,8 @@ function FormSection() {
       {/* personal Detail */}
       {activeFormIndex == 1 ? (
         <PersonalDetailForm enabledNext={(v: boolean) => setEnableNext(v)} />
-      ) : activeFormIndex == 2 ? <SummaryForm enabledNext={(v: boolean) => setEnableNext(v)}/> :null}
-      {/* Summary */}
+      ) : activeFormIndex == 2 ? <SummaryForm enabledNext={(v: boolean) => setEnableNext(v)}/> : activeFormIndex==3 ? <ExperienceForm enabledNext={(v: boolean) => setEnableNext(v)} /> :activeFormIndex==4 ? <EducationForm enabledNext={(v: boolean) => setEnableNext(v)}/> : activeFormIndex==5 ? <SkillForm enabledNext={(v: boolean) => setEnableNext(v)}/> : ''}
+      
     
       {/* Experience */}
       {/* Education */}
