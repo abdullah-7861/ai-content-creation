@@ -2,11 +2,15 @@ import { ResumeInfoContext } from "@/app/resume/(context)/ResumeInfoContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { db } from "@/utils/db";
+import { EducationTable } from "@/utils/schema";
+import { eq } from "drizzle-orm";
 import { University } from "lucide-react";
+import { useParams } from "next/navigation";
 import React, { ChangeEvent, useContext, useEffect, useState } from "react";
 
 interface FORM {
-  university: "";
+  universityName: "";
   degree: "";
   major: "";
   startDate: "";
@@ -14,11 +18,11 @@ interface FORM {
   description: "";
 }
 
-function EducationForm({ enabledNext }: any) {
+function EducationForm() {
   const { resumeInfo, setResumeInfo } = useContext<any>(ResumeInfoContext);
   const [educationList, setEducationList] = useState<FORM[]>([
     {
-      university: "",
+      universityName: "",
       degree: "",
       major: "",
       startDate: "",
@@ -26,6 +30,14 @@ function EducationForm({ enabledNext }: any) {
       description: "",
     },
   ]);
+  const currentResumeId = useParams();
+
+
+  useEffect(()=>{
+
+    resumeInfo && setEducationList(resumeInfo?.education);
+ 
+   },[])
 
   const handelChange = (
     index: number,
@@ -45,7 +57,7 @@ function EducationForm({ enabledNext }: any) {
     setEducationList([
       ...educationList,
       {
-        university: "",
+        universityName: "",
         degree: "",
         major: "",
         startDate: "",
@@ -67,11 +79,36 @@ function EducationForm({ enabledNext }: any) {
     // console.log(experienceList)
   }, [educationList]);
 
-  const onSave = () => {
-    // e.preventDefault();
-    // console.log(formData)
-    // updateResume(currentResumeId,formData);
-    enabledNext(true);
+    const onSave = async () => {
+      // e.preventDefault();
+      // console.log(formData)
+      // updateResume(currentResumeId,formData);
+      await SaveEducationInDB(educationList, currentResumeId);
+     
+    };
+
+  const SaveEducationInDB = async (
+    educationList: FORM[],
+    currentResumeId: any
+  ) => {
+    await db
+      .delete(EducationTable)
+      .where(
+        eq(EducationTable?.resumeId, currentResumeId?.resumeId)
+      );
+
+    const result = await db.insert(EducationTable).values(
+      educationList.map((item, index) => ({
+        resumeId: currentResumeId?.resumeId,
+        universityName: item?.universityName,
+        degree: item?.degree,
+        major: item?.major,
+        startDate: item?.startDate,
+        endtDate: item?.endDate,
+        description: item?.description,
+      }))
+    );
+    console.log(result);
   };
 
   return (
@@ -88,6 +125,7 @@ function EducationForm({ enabledNext }: any) {
                 <Input
                   name="universityName"
                   onChange={(event) => handelChange(index, event)}
+                  defaultValue={item?.universityName}
                 />
               </div>
               <div>
@@ -95,6 +133,7 @@ function EducationForm({ enabledNext }: any) {
                 <Input
                   name="degree"
                   onChange={(event) => handelChange(index, event)}
+                  defaultValue={item?.degree}
                 />
               </div>
 
@@ -103,6 +142,7 @@ function EducationForm({ enabledNext }: any) {
                 <Input
                   name="major"
                   onChange={(event) => handelChange(index, event)}
+                  defaultValue={item?.major}
                 />
               </div>
               <div>
@@ -111,6 +151,7 @@ function EducationForm({ enabledNext }: any) {
                   type="date"
                   name="startDate"
                   onChange={(event) => handelChange(index, event)}
+                  defaultValue={item?.startDate}
                 />
               </div>
               <div>
@@ -119,6 +160,7 @@ function EducationForm({ enabledNext }: any) {
                   type="date"
                   name="endDate"
                   onChange={(event) => handelChange(index, event)}
+                  defaultValue={item?.endDate}
                 />
               </div>
 
@@ -127,10 +169,16 @@ function EducationForm({ enabledNext }: any) {
                 <Textarea
                   name="description"
                   onChange={(event) => handelChange(index, event)}
+                  defaultValue={item?.description}
                 />
               </div>
             </div>
-            <div className="flex justify-between">
+            
+          </div>
+        ))}
+
+      </div>
+      <div className="flex justify-between">
               <div className="flex gap-2">
                 <Button
                   variant="outline"
@@ -154,9 +202,6 @@ function EducationForm({ enabledNext }: any) {
                 Save
               </Button>
             </div>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }

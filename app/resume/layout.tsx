@@ -15,7 +15,7 @@ function layout({
   const [click, setClick] = useState(false);
   return (
     <div>
-      <div className=" py-4 px-16 shadow-sm border-b-2 flex justify-between items-center bg-white ">
+      <div id="no-print" className=" py-4 px-16 shadow-sm border-b-2 flex justify-between items-center bg-white ">
         <a href="/">
           <Image src={"/logo.svg"} alt="logo" width={120} height={100} />
         </a>

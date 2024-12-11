@@ -4,8 +4,12 @@ import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
 import { Button } from "@/components/ui/button";
 import { ResumeInfoContext } from "@/app/resume/(context)/ResumeInfoContext";
+import { useParams } from "next/navigation";
+import { db } from "@/utils/db";
+import { SkillTable } from "@/utils/schema";
+import { eq } from "drizzle-orm";
 
-function SkillForm({enabledNext}:any) {
+function SkillForm() {
   const { resumeInfo, setResumeInfo } = useContext<any>(ResumeInfoContext);
   const [skillList, setSkillList] = useState([
     {
@@ -13,6 +17,13 @@ function SkillForm({enabledNext}:any) {
       rating: 0,
     },
   ]);
+  const currentResumeId = useParams();
+
+  useEffect(()=>{
+
+    resumeInfo && setSkillList(resumeInfo?.skills);
+ 
+   },[])
 
   const handleChange = (index: number, name: string, value: string) => {
     const updatedSkillList = skillList.map((item, idx) =>
@@ -43,11 +54,28 @@ function SkillForm({enabledNext}:any) {
     // console.log(experienceList)
   }, [skillList]);
 
-  const onSave = () => {
+  const onSave = async () => {
     // e.preventDefault();
     // console.log(formData)
     // updateResume(currentResumeId,formData);
-    enabledNext(true);
+    await SaveEducationInDB(skillList, currentResumeId);
+  };
+
+  const SaveEducationInDB = async (skillList: any, currentResumeId: any) => {
+    await db
+    .delete(SkillTable)
+    .where(
+      eq(SkillTable?.resumeId, currentResumeId?.resumeId)
+    );
+
+    const result = await db.insert(SkillTable).values(
+      skillList.map((item: any, index: any) => ({
+        resumeId: currentResumeId?.resumeId,
+        name: item?.name,
+        rating: item?.rating,
+      }))
+    );
+    console.log(result);
   };
 
   return (
@@ -63,12 +91,14 @@ function SkillForm({enabledNext}:any) {
               <Input
                 className="w-full"
                 onChange={(e) => handleChange(index, "name", e.target.value)}
+                defaultValue={item?.name}
               />
             </div>
             <Rating
               style={{ maxWidth: 120 }}
               value={item.rating}
               onChange={(v: any) => handleChange(index, "rating", v)}
+              
             />
           </div>
         ))}

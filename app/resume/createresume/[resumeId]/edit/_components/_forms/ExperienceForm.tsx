@@ -5,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { db } from "@/utils/db";
 import { ProfessionalExperienceTable } from "@/utils/schema";
 import exp from "constants";
+import { eq } from "drizzle-orm";
 import { LoaderCircle } from "lucide-react";
 import { useParams } from "next/navigation";
 import { list } from "postcss";
@@ -29,14 +30,20 @@ const formField: FORM = {
   endDate: "",
   workSummery: "",
 };
-function ExperienceForm({ enabledNext }: any) {
+function ExperienceForm() {
   const [loading, setLoading] = useState(false);
   const [experienceList, setExperienceList] = useState<FORM[]>([
     { ...formField },
   ]);
-
   const { resumeInfo, setResumeInfo } = useContext<any>(ResumeInfoContext);
   const currentResumeId = useParams();
+
+  useEffect(()=>{
+
+    resumeInfo && setExperienceList(resumeInfo?.experience);
+ 
+   },[])
+
 
   const handleChange = (
     index: number,
@@ -71,18 +78,20 @@ function ExperienceForm({ enabledNext }: any) {
     // e.preventDefault();
     // console.log(formData)
     // updateResume(currentResumeId,formData);
-     await SaveExperience(experienceList, currentResumeId);
-    enabledNext(true);
+    await SaveExperience(experienceList, currentResumeId);
+    
   };
 
   const SaveExperience = async (
     experienceList: FORM[],
     currentResumeId: any
   ) => {
+    await db
+      .delete(ProfessionalExperienceTable)
+      .where(
+        eq(ProfessionalExperienceTable?.resumeId, currentResumeId?.resumeId)
+      );
 
-      await db.delete(ProfessionalExperienceTable);
-
-      
     const result = await db.insert(ProfessionalExperienceTable).values(
       experienceList.map((item, index) => ({
         resumeId: currentResumeId?.resumeId,
@@ -112,6 +121,8 @@ function ExperienceForm({ enabledNext }: any) {
                   <Input
                     name="title"
                     onChange={(event) => handleChange(index, event)}
+                    defaultValue={item?.title}
+                    
                   />
                 </div>
                 <div>
@@ -119,6 +130,7 @@ function ExperienceForm({ enabledNext }: any) {
                   <Input
                     name="companyName"
                     onChange={(event) => handleChange(index, event)}
+                    defaultValue={item?.companyName}
                   />
                 </div>
                 <div>
@@ -126,6 +138,7 @@ function ExperienceForm({ enabledNext }: any) {
                   <Input
                     name="city"
                     onChange={(event) => handleChange(index, event)}
+                    defaultValue={item?.city}
                   />
                 </div>
                 <div>
@@ -133,6 +146,7 @@ function ExperienceForm({ enabledNext }: any) {
                   <Input
                     name="state"
                     onChange={(event) => handleChange(index, event)}
+                    defaultValue={item?.state}
                   />
                 </div>
                 <div>
@@ -141,6 +155,7 @@ function ExperienceForm({ enabledNext }: any) {
                     type="date"
                     name="startDate"
                     onChange={(event) => handleChange(index, event)}
+                    defaultValue={item?.startDate}
                   />
                 </div>
                 <div>
@@ -149,6 +164,7 @@ function ExperienceForm({ enabledNext }: any) {
                     type="date"
                     name="endDate"
                     onChange={(event) => handleChange(index, event)}
+                    defaultValue={item?.endDate}
                   />
                 </div>
                 <div className="col=span-2">
@@ -157,6 +173,7 @@ function ExperienceForm({ enabledNext }: any) {
                     name="workSummery"
                     className="w-96"
                     onChange={(event) => handleChange(index, event)}
+                    defaultValue={item?.workSummery}
                   />
                 </div>
               </div>

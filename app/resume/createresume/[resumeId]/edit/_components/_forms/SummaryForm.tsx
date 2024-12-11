@@ -10,7 +10,7 @@ import { useParams } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
 
 const summaryPrompt ="Job Title: {jobTitle}, Depends on job title give me summary for my resume. you dont have to mention skills or experience, just based on title give me 1 summary option of 4 lines.   ";
-function SummaryForm({ enabledNext }: any) {
+function SummaryForm() {
   const { resumeInfo, setResumeInfo } = useContext<any>(ResumeInfoContext);
   const [summary, setSummary] = useState<string>("");
   const [loading,setLoading] = useState(false)
@@ -40,7 +40,7 @@ function SummaryForm({ enabledNext }: any) {
 
     // Will update or push resume INfo in DB
     updateResume(currentResumeId, summary);
-    enabledNext(true);
+  
   };
 
   const updateResume = async (currentResumeId: any, summary: string) => {
@@ -77,9 +77,10 @@ function SummaryForm({ enabledNext }: any) {
           </div>
           <Textarea
             required
+            defaultValue={resumeInfo?.summary}
             className="mt-5 "
             onChange={(e) => {
-              enabledNext(false);
+              
               return setSummary(e.target.value);
             }}
           />

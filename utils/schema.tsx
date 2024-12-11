@@ -22,6 +22,8 @@ export const ResumeTable = pgTable("ResumeTable", {
   phone: varchar("phone"),
   email: varchar("email"),
   summary: varchar("summary"),
+  themeColor:varchar("themeColor").default("#ff6666"),
+
 });
 
 export const ProfessionalExperienceTable = pgTable("ProfessionalExperienceTable", {

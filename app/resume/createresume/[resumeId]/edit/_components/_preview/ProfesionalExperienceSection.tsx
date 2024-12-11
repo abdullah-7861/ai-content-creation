@@ -10,7 +10,7 @@ function ProfesionalExperienceSection({ resumeInfo }: any) {
           color: resumeInfo?.themeColor,
         }}
       >
-        Professional Expererience
+        Professional Experience
       </h2>
       <hr style={{
         borderColor:resumeInfo?.themeColor

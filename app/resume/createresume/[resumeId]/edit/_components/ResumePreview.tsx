@@ -1,13 +1,30 @@
 import { ResumeInfoContext } from "@/app/resume/(context)/ResumeInfoContext";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import PersonalDetailPreview from "./_preview/PersonalDetailPreview";
 import SummarySection from "./_preview/SummarySection";
 import ProfesionalExperienceSection from "./_preview/ProfesionalExperienceSection";
 import EducationPreviewSection from "./_preview/EducationPreviewSection";
 import SkillPreviewSection from "./_preview/SkillPreviewSection";
+import { db } from "@/utils/db";
+import { ResumeTable } from "@/utils/schema";
+import { eq } from "drizzle-orm";
+import { useParams } from "next/navigation";
 
-function ResumePreview() {
+function ResumePreview({resumeinfo}:any) {
   const { resumeInfo, setResumeInfo } = useContext<any>(ResumeInfoContext);
+  const currentResumeId = useParams();
+  // useEffect(() => {
+  //   getThemeColorFromDB();
+  // }, []);
+
+  // const getThemeColorFromDB = async () => {
+  //   const color = await db
+  //     .select({ themeColor: ResumeTable?.themeColor })
+  //     .from(ResumeTable)
+  //     // @ts-ignore
+  //     .where(eq(ResumeTable?.resumeid, currentResumeId?.resumeId));
+  //   console.log(color); // [{ email: 'user@example.com' }]
+  // };
   return (
     <div
       className="shadow-lg h-full p-14 border-t-[20px]"
@@ -22,9 +39,9 @@ function ResumePreview() {
       {/* Professional Experience */}
       <ProfesionalExperienceSection resumeInfo={resumeInfo} />
       {/* Education */}
-        <EducationPreviewSection resumeInfo={resumeInfo}/>
+      <EducationPreviewSection resumeInfo={resumeInfo} />
       {/* Skills */}
-      <SkillPreviewSection resumeInfo={resumeInfo}/>
+      <SkillPreviewSection resumeInfo={resumeInfo} />
     </div>
   );
 }

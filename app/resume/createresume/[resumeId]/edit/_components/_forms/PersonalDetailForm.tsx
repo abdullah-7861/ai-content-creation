@@ -9,13 +9,17 @@ import React, { useContext, useEffect, useState } from "react";
 
 function PersonalDetailForm({ enabledNext }: any) {
   const { resumeInfo, setResumeInfo } = useContext<any>(ResumeInfoContext);
-  const [formData, setFormData] = useState<object>({});
+  const [formData, setFormData] = useState<any>({});
   const currentResumeId = useParams();
 
+  useEffect(()=>{
+   resumeInfo && setFormData(resumeInfo);
+
+  },[resumeInfo])
 
 
   const handleInputChange = (e: any) => {
-    enabledNext(false);
+    
     const { name, value } = e.target;
 
     setFormData({
@@ -33,7 +37,7 @@ function PersonalDetailForm({ enabledNext }: any) {
     e.preventDefault();
     // console.log(formData)
     updateResume(currentResumeId,formData);
-    enabledNext(true);
+    
 
   };
 
