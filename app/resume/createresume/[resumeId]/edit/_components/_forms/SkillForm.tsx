@@ -111,14 +111,14 @@ function SkillForm() {
             className="text-purple-600"
             onClick={AddNewSkill}
           >
-            + Add More Education
+            + Add More Skills
           </Button>
           <Button
             variant="outline"
             className="text-purple-600"
             onClick={RemoveSkill}
           >
-            - Remove Education
+            - Remove Skills
           </Button>
         </div>
         <Button

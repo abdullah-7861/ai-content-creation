@@ -17,20 +17,19 @@ function OutputSection({ AiOutput }: props) {
   }, [AiOutput]);
 
   return (
-    <div className="bg-white shadow-lg border rounded-lg">
+    <div className="bg-white shadow-lg border rounded-lg  min-h-full ">
       <div className="flex justify-between items-center p-5">
         <h2 className="font-medium  text-lg">Your Result</h2>
-        <Button className="bg-purple-600   hover:bg-purple-500 flex gap-1"
-        onClick={(e)=>navigator.clipboard.writeText(AiOutput)}>
+        <Button
+          className="bg-purple-600   hover:bg-purple-500 flex gap-1"
+          onClick={(e) => navigator.clipboard.writeText(AiOutput)}
+        >
           <Copy className="w-4 h-4 mr-1" /> Copy
         </Button>
       </div>
       <hr />
-      <div className="bg-white h-96 p-5">
-        {AiOutput}
-        
-      </div>
-{/* 
+      <div  className="bg-white  p-5 whitespace-pre-wrap">{AiOutput}</div>
+      {/* 
       <Editor
         ref={editorRef} // taking reference of <Editor/ > component to access
         initialValue="Your Result Will Appear Here"

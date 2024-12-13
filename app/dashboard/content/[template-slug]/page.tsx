@@ -38,7 +38,11 @@ function CreatNewContent(props: PROPS) {
     const result = await chatSession.sendMessage(FinalAIPrompt);
     // console.log(result.response.text());
     setAiOutput(result.response.text());
-    await SaveInDb(JSON.stringify(formData), selectedTemplate?.slug, result.response.text());
+    await SaveInDb(
+      JSON.stringify(formData),
+      selectedTemplate?.slug,
+      result.response.text()
+    );
     setLoading(false);
   };
 
@@ -54,7 +58,7 @@ function CreatNewContent(props: PROPS) {
   };
 
   return (
-    <div className="p-7">
+    <div className="p-7  bg-slate-100 min-h-screen ">
       <Link href={"/dashboard"}>
         <Button className="bg-purple-600   hover:bg-purple-500">
           {" "}
@@ -69,8 +73,7 @@ function CreatNewContent(props: PROPS) {
           loading={loading}
         />
         {/* outputsection */}
-        <div className="col-span-2">
-          {" "}
+        <div className="col-span-2  ">
           <OutputSection AiOutput={aiOutput} />
         </div>
       </div>

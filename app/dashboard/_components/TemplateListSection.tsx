@@ -12,12 +12,19 @@ export interface TEMPLATE {
   form?: FORM[];
 }
 
+export type OPTION  = string[]; // List of strings for quantity
+
+// Define the FORM interface
 export interface FORM {
   label: string;
   field: string;
   name: string;
-  required?: boolean;
+  defaultvalue: string;
+  required?: boolean; // Optional
+  options?: OPTION; // Optional list of strings
 }
+
+
 
 function TemplateListSection({ userSearchInput }: any) {
   const [templateList, setTemplateList] = useState(Template);
