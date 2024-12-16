@@ -25,16 +25,15 @@ interface PROPS {
 // passing down parent funct as prop to fetch child property to parent
 
 function FormSection({ selectedTemplate, userFormInput, loading }: PROPS) {
-  const [formData, setFormData] = useState<any>();
+  const [formData, setFormData] = useState<any>({});
 
   const handleInputChange = (event: any) => {
     const { name, value } = event.target;
-    console.log(name, value);
+
     setFormData({ ...formData, [name]: value });
   };
-  const handleSelectChange = (value: string, name:string) => {
-
-    console.log(name, value);
+  const handleSelectChange = (value: string, name: string) => {
+    // console.log(name, value);
     setFormData({ ...formData, [name]: value });
   };
 
@@ -44,9 +43,6 @@ function FormSection({ selectedTemplate, userFormInput, loading }: PROPS) {
     userFormInput(formData);
   };
 
-  useEffect(()=>{
-    console.log(formData)
-  },[formData])
   return (
     <div className="p-5 shadow-md border rounded-lg bg-white h-fit ">
       {/* @ts-ignore  */}
@@ -73,7 +69,11 @@ function FormSection({ selectedTemplate, userFormInput, loading }: PROPS) {
                 onChange={handleInputChange}
               />
             ) : item.field == "Select" ? (
-              <Select name={item?.name} defaultValue={item.defaultvalue} onValueChange={(value)=>handleSelectChange(value, item?.name)}>
+              <Select
+                required
+                name={item?.name}
+                onValueChange={(value) => handleSelectChange(value, item?.name)}
+              >
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder={item?.name} />
                 </SelectTrigger>

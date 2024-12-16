@@ -12,6 +12,7 @@ import { db } from "@/utils/db";
 import { AIOutput } from "@/utils/schema";
 import { useUser } from "@clerk/clerk-react";
 import moment from "moment";
+import openai from "@/utils/ImageGen";
 
 interface PROPS {
   params: {
@@ -27,23 +28,89 @@ function CreatNewContent(props: PROPS) {
   const [loading, setLoading] = useState(false);
 
   const [aiOutput, setAiOutput] = useState<string>("");
+  const [image, setImage] = useState<string>("");
+  const [music, setMusic] = useState<string>("");
+  const [prompt, setPrompt] = useState<string>("90's rap");
 
   const { user } = useUser();
 
-  const GenerateAIContent = async (formData: any) => {
-    setLoading(true);
+  // const GenerateAIContent = async (formData: any) => {
+  //   console.log(formData)
+  //   setLoading(true);
 
-    const selectedPrompt = selectedTemplate?.aiPrompt;
-    const FinalAIPrompt = JSON.stringify(formData) + "," + selectedPrompt;
-    const result = await chatSession.sendMessage(FinalAIPrompt);
-    // console.log(result.response.text());
-    setAiOutput(result.response.text());
-    await SaveInDb(
-      JSON.stringify(formData),
-      selectedTemplate?.slug,
-      result.response.text()
-    );
-    setLoading(false);
+  //   const selectedPrompt = selectedTemplate?.aiPrompt;
+  //   const FinalAIPrompt = JSON.stringify(formData) + "," + selectedPrompt;
+  //   const result = await chatSession.sendMessage(FinalAIPrompt);
+  //   // console.log(result.response.text());
+  //   setAiOutput(result.response.text());
+  //   await SaveInDb(
+  //     JSON.stringify(formData),
+  //     selectedTemplate?.slug,
+  //     result.response.text()
+  //   );
+  //   setLoading(false);
+  // };
+
+  // Client-side fetch in your `page.tsx`
+
+  // const generateImages = async (formData: any) => {
+  //   // console.log(formData);
+  //   try {
+  //     setImage([]);
+  //     const response = await axios.post("/api/image", formData);
+  //     const urls = response.data.map((image: { url: string }) => image.url);
+  //     console.log(response);
+  //     setImage(urls);
+  //     console.log(response);
+  //   } catch (error: any) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // const generateImages = async (formData: any) => {
+  //   setLoading(true);
+  //   try {
+  //     const response = await openai.images.generate({
+  //       prompt: "A picture of a horse in the Swiss Alps",
+  //       model: "dall-e-2",
+  //       n: 2,
+  //       size: "256x256",
+  //     });
+  //     console.log(response);
+  //     setImage(response.data.map((img: any) => img.url)); // OpenAI response includes image URLs
+  //   } catch (err: any) {
+  //     console.log(err, "failed to generate Image");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  const generateImages = async (formData: any) => {
+    try {
+      setLoading(true);
+      const response = await fetch("/api/music", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt: prompt,
+        }),
+      });
+        
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setMusic(data.audio);
+      // setImage(data);
+    } catch (error) {
+      console.log("error:", error);
+    } finally {
+      setLoading(false);
+      setPrompt("");
+    }
   };
 
   const SaveInDb = async (formData: any, slug: any, aiOutput: string) => {
@@ -69,12 +136,12 @@ function CreatNewContent(props: PROPS) {
         {/* formsection */}
         <FormSection
           selectedTemplate={selectedTemplate}
-          userFormInput={(v: any) => GenerateAIContent(v)}
+          userFormInput={(v: any) => generateImages(v)}
           loading={loading}
         />
         {/* outputsection */}
         <div className="col-span-2  ">
-          <OutputSection AiOutput={aiOutput} />
+          <OutputSection AiOutput={aiOutput} ImageOutput={image} MusicOutput={music} />
         </div>
       </div>
     </div>

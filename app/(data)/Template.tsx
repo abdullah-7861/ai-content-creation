@@ -149,7 +149,7 @@ export default [
     category: "Image",
     icon: "https://cdn.icon-icons.com/icons2/10/PNG/256/imagemapofpixels_theimage_image_1555.png",
     slug: "image-generation",
-    aiPrompt: "Generate Image based on prompt",
+    aiPrompt: "Generate Image based on imageprompt, quantity and resolution provided.",
     form: [
       {
         label: "Turn Your prompt into Image",
