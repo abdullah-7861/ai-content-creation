@@ -6,15 +6,29 @@
 
 
 type State = {
-  generating: boolean;
-  setGenerating: (generating: boolean) => void;
+  tags: string[]
+  setTags: (tags: string[]) => void
+  activeTag: string
+  setActiveTag: (tag: string) => void
+  activeColor: string
+  setActiveColor: (color: string) => void
+  generating: boolean
+  setGenerating: (generating: boolean) => void
 };
 
-const getStore = (initialState:{generating:boolean}) => {
+const getStore = (initialState:{activeTag: string
+  activeColor: string
+  activeImage: string}) => {
   return createStore<State>()(
     persist(
       (set) => ({
-        generating: initialState.generating,
+        tags: [],
+        activeTag: initialState.activeTag,
+        setTags: (tags) => set({ tags }),
+        setActiveTag: (tag) => set({ activeTag: tag }),
+        activeColor: initialState.activeColor,
+        setActiveColor: (color) => set({ activeColor: color }),
+        generating: false,
         setGenerating: (generating) => set({ generating }),
       }),
       {

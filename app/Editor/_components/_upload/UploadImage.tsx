@@ -1,15 +1,19 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { useImageStore } from "@/lib/image-store";
 import { useLayerStore } from "@/lib/layer-store";
 import { uploadImage } from "@/server/upload-image";
 import React from "react";
 import { useDropzone } from "react-dropzone";
-function UploadImage() {
-  const setGenerating = useImageStore((state) => state.setGenerating);
-  const activeLayer = useLayerStore((state) => state.activeLayer);
-  const updateLayer = useLayerStore((state) => state.updateLayer);
-  const setActiveLayer = useLayerStore((state) => state.setActiveLayer);
+import { toast } from "sonner"
+import Lottie from "lottie-react"
+import { cn } from "@/lib/utils";
+
+export default function UploadImage() {
+  const setTags = useImageStore((state) => state.setTags)
+  const setGenerating = useImageStore((state) => state.setGenerating)
+  const activeLayer = useLayerStore((state) => state.activeLayer)
+  const updateLayer = useLayerStore((state) => state.updateLayer)
+  const setActiveLayer = useLayerStore((state) => state.setActiveLayer)
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     maxFiles: 1,
@@ -17,14 +21,15 @@ function UploadImage() {
       "image/png": [".png"],
       "image/jpg": [".jpg"],
       "image/webp": [".webp"],
-      "image/jpeg": [".jpeg"],
+      "image/jpeg": ["jpeg"],
     },
-    onDrop: async (acceptFiles, fileRejections) => {
-      if (acceptFiles.length) {
-        const formData = new FormData();
-        formData.append("image", acceptFiles[0]);
-        const objectUrl = URL.createObjectURL(acceptFiles[0]);
-        setGenerating(true);
+    onDrop: async (acceptedFiles, fileRejections) => {
+      if (acceptedFiles.length) {
+        const formData = new FormData()
+        formData.append("image", acceptedFiles[0])
+        //Generate Object url
+        const objectUrl = URL.createObjectURL(acceptedFiles[0])
+        setGenerating(true)
 
         updateLayer({
           id: activeLayer.id,
@@ -35,10 +40,10 @@ function UploadImage() {
           publicId: "",
           format: "",
           resourceType: "image",
-        });
-        setActiveLayer(activeLayer.id);
+        })
+        setActiveLayer(activeLayer.id)
+        const res = await uploadImage({ image: formData })
 
-        const res = await uploadImage({ image: formData });
         if (res?.data?.success) {
           updateLayer({
             id: activeLayer.id,
@@ -49,43 +54,48 @@ function UploadImage() {
             publicId: res.data.success.public_id,
             format: res.data.success.format,
             resourceType: res.data.success.resource_type,
-          });
-          setActiveLayer(activeLayer.id);
+          })
+          setTags(res.data.success.tags)
+
+          setActiveLayer(activeLayer.id)
+          console.log(activeLayer)
           setGenerating(false)
         }
-
-        if (res?.data?.error){
+        if (res?.data?.error) {
           setGenerating(false)
         }
+      }
 
-
+      if (fileRejections.length) {
+        console.log("rejected")
+        toast.error(fileRejections[0].errors[0].message)
       }
     },
-  });
+  })
 
-  if(!activeLayer.url)
-  return (
-    <Card
-      {...getRootProps()}
-      className={`hover:cursor-pointer hover:bg-secondary hover:border-primary transition-all ease-in-out ${
-        isDragActive ? "animate-pulse border-primary bg-secondary" : ""
-      } `}
-    >
-      <CardContent className=" flex flex-col h-full items-center justify-center px-2 py-24">
-        <input {...getInputProps()} type="text" />
-        <div className="flex items-center flex-col justify-center gap-2">
-          <p className="text-muted-foreground text-2xl">
-            {isDragActive
-              ? "Drop Your Image Here!"
-              : "Start by uploading an Image"}
-          </p>
-          <p className="text-muted-foreground">
-            Supported Format .png .jpg .jpeg .webp
-          </p>
-        </div>
-      </CardContent>
-    </Card>
-  );
+  if (!activeLayer.url)
+    return (
+      <Card
+        {...getRootProps()}
+        className={cn(
+          " hover:cursor-pointer hover:bg-secondary hover:border-primary transition-all  ease-in-out ",
+          `${isDragActive ? "animate-pulse border-primary bg-secondary" : ""}`
+        )}
+      >
+        <CardContent className="flex flex-col h-full items-center justify-center px-2 py-24  text-xs ">
+          <input {...getInputProps()} />
+          <div className="flex items-center flex-col justify-center gap-4">
+            
+            <p className="text-muted-foreground text-2xl">
+              {isDragActive
+                ? "Drop your image here!"
+                : "Start by uploading an image"}
+            </p>
+            <p className="text-muted-foreground">
+              Supported Formats .jpeg .jpg .png .webp
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    )
 }
-
-export default UploadImage;
