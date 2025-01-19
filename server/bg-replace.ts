@@ -10,9 +10,9 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_SECRET,
 });
 
-const recolorSchema = z.object({
+const bgReplaceSchema = z.object({
   activeImage: z.string(),
-  format: z.string(),
+  prompt: z.string(),
 });
 
 async function checkImageProcessing(url: string) {
@@ -27,22 +27,23 @@ async function checkImageProcessing(url: string) {
   }
 }
 
-export const bgRemoval = actionClient
-  .schema(recolorSchema)
-  .action(async ({ parsedInput: { activeImage, format } }) => {
-    const form = activeImage.split(format);
-    const pngConvert = form[0] + "png";
-    const parts = pngConvert.split("/upload/");
-    const background = "blank";
-    const removeUrl = `${parts[0]}/upload/e_gen_background_replace/${parts[1]}`;
-    // const removeUrl = `${parts[0]}/upload/e_background_removal,e_extract/${parts[1]}`;
+export const bgReplace = actionClient
+  .schema(bgReplaceSchema)
+  .action(async ({ parsedInput: { activeImage, prompt } }) => {
+    const parts = activeImage.split("/upload/");
+    // const pngConvert = form[0] + "png";
+    // const parts = pngConvert.split("/upload/");
+    // const removeUrl = `${parts[0]}/upload/e_gen_background_replace/${parts[1]}`;
+    const bgReplaceUrl = prompt
+      ? `${parts[0]}/upload/e_gen_background_replace:prompt_${prompt}/${parts[1]}`
+      : `${parts[0]}/upload/e_gen_background_replace/${parts[1]}`;
     // Poll the URL to check if the image is processed
     let isProcessed = false;
     const maxAttempts = 20;
     const delay = 1000; // 1 second
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
-      isProcessed = await checkImageProcessing(removeUrl);
-      console.log(removeUrl);
+      isProcessed = await checkImageProcessing(bgReplaceUrl);
+      console.log(bgReplaceUrl);
       if (isProcessed) {
         break;
       }
@@ -52,6 +53,6 @@ export const bgRemoval = actionClient
     if (!isProcessed) {
       throw new Error("Image processing timed out");
     }
-    console.log(removeUrl);
-    return { success: removeUrl };
+    console.log(bgReplaceUrl);
+    return { success: bgReplaceUrl };
   });

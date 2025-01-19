@@ -3,6 +3,7 @@
 import { UploadApiResponse, v2 as cloudinary } from "cloudinary";
 import { actionClient } from "@/server/safe-action";
 import z from "zod";
+// import { Cloudinary } from "@cloudinary/url-gen"
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
@@ -10,9 +11,11 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_SECRET,
 });
 
-const recolorSchema = z.object({
+const genFillSchema = z.object({
   activeImage: z.string(),
-  format: z.string(),
+  aspect: z.string(),
+  width: z.string(),
+  height: z.string(),
 });
 
 async function checkImageProcessing(url: string) {
@@ -27,22 +30,20 @@ async function checkImageProcessing(url: string) {
   }
 }
 
-export const bgRemoval = actionClient
-  .schema(recolorSchema)
-  .action(async ({ parsedInput: { activeImage, format } }) => {
-    const form = activeImage.split(format);
-    const pngConvert = form[0] + "png";
-    const parts = pngConvert.split("/upload/");
-    const background = "blank";
-    const removeUrl = `${parts[0]}/upload/e_gen_background_replace/${parts[1]}`;
-    // const removeUrl = `${parts[0]}/upload/e_background_removal,e_extract/${parts[1]}`;
+export const genFill = actionClient
+  .schema(genFillSchema)
+  .action(async ({ parsedInput: { activeImage, aspect, width, height } }) => {
+    const parts = activeImage.split("/upload/");
+
+    const fillUrl = `${parts[0]}/upload/ar_${aspect},b_gen_fill,c_pad,w_${width},h_${height}/${parts[1]}`;
+    console.log(genFill);
+
     // Poll the URL to check if the image is processed
     let isProcessed = false;
     const maxAttempts = 20;
     const delay = 1000; // 1 second
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
-      isProcessed = await checkImageProcessing(removeUrl);
-      console.log(removeUrl);
+      isProcessed = await checkImageProcessing(fillUrl);
       if (isProcessed) {
         break;
       }
@@ -50,8 +51,7 @@ export const bgRemoval = actionClient
     }
 
     if (!isProcessed) {
-      throw new Error("Image processing timed out");
+      return { error: "Image processing failed" };
     }
-    console.log(removeUrl);
-    return { success: removeUrl };
+    return { success: fillUrl };
   });

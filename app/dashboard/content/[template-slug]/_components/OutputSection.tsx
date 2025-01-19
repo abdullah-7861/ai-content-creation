@@ -59,10 +59,10 @@ function OutputSection({ AiOutput, ImageOutput, MusicOutput }: props) {
         </div>
       ) : (
         <div>
-          <audio controls className="w-full mt-8">
+          {/* <audio controls className="w-full mt-8">
             <source src={MusicOutput} />
 
-          </audio>
+          </audio> */}
         </div>
       )}
       {/* 
