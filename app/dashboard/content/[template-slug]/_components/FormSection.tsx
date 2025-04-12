@@ -19,12 +19,19 @@ import React, { useEffect, useState } from "react";
 interface PROPS {
   selectedTemplate?: TEMPLATE;
   userFormInput: any;
+  userImageInput: any;
   loading: boolean;
 }
 
 // passing down parent funct as prop to fetch child property to parent
 
-function FormSection({ selectedTemplate, userFormInput, loading }: PROPS) {
+
+function FormSection({
+  selectedTemplate,
+  userFormInput,
+  userImageInput,
+  loading,
+}: PROPS) {
   const [formData, setFormData] = useState<any>({});
 
   const handleInputChange = (event: any) => {
@@ -40,7 +47,13 @@ function FormSection({ selectedTemplate, userFormInput, loading }: PROPS) {
   const onSubmit = (e: any) => {
     e.preventDefault();
     // passing child property to the parent
-    userFormInput(formData);
+    // console.log(formData.imageprompt);
+    if (formData.imageprompt) {
+      console.log(formData.imageprompt);
+      userImageInput(formData.imageprompt);
+    } else {
+      userFormInput(formData);
+    }
   };
 
   return (

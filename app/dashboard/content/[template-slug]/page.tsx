@@ -15,12 +15,15 @@ import moment from "moment";
 import openai from "@/utils/ImageGen";
 import axios from "axios";
 import router, { Router } from "next/router";
+import { toast } from "sonner";
+import { generateImage } from "@/app/api/generate-image/route";
 
 interface PROPS {
   params: {
     "template-slug": string;
   };
 }
+const apiKey = "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";
 
 function CreatNewContent(props: PROPS) {
   const selectedTemplate: TEMPLATE | undefined = Template?.find(
@@ -30,14 +33,13 @@ function CreatNewContent(props: PROPS) {
   const [loading, setLoading] = useState(false);
 
   const [aiOutput, setAiOutput] = useState<string>("");
-  const [image, setImage] = useState<string>("");
+  const [imageUrl, setImageUrl] = useState<string>("");
   const [music, setMusic] = useState<string>();
-  const [prompt, setPrompt] = useState<string>("90's rap");
-
+  const [currentPrompt, setCurrentPrompt] = useState("");
   const { user } = useUser();
 
   const GenerateAIContent = async (formData: any) => {
-    console.log(formData);
+    // console.log(formData);
     setLoading(true);
 
     const selectedPrompt = selectedTemplate?.aiPrompt;
@@ -69,23 +71,25 @@ function CreatNewContent(props: PROPS) {
   //   }
   // };
 
-  // const generateImages = async (formData: any) => {
-  //   setLoading(true);
-  //   try {
-  //     const response = await openai.images.generate({
-  //       prompt: "A picture of a horse in the Swiss Alps",
-  //       model: "dall-e-2",
-  //       n: 2,
-  //       size: "256x256",
-  //     });
-  //     console.log(response);
-  //     setImage(response.data.map((img: any) => img.url)); // OpenAI response includes image URLs
-  //   } catch (err: any) {
-  //     console.log(err, "failed to generate Image");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  const handleGenerate = async (prompt: string) => {
+    console.log(prompt, apiKey);
+    setLoading(true);
+    setCurrentPrompt(prompt);
+
+    try {
+      const newImageUrl = await generateImage(prompt, apiKey);
+      setImageUrl(newImageUrl);
+      toast.success("Image generated successfully!");
+    } catch (error) {
+      console.error("Failed to generate image:", error);
+      toast.error(
+        error instanceof Error ? error.message : "Failed to generate image"
+      );
+      setImageUrl("");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // const generateImages = async (formData: any) => {
   //   console.log(formData);
@@ -181,13 +185,15 @@ function CreatNewContent(props: PROPS) {
         <FormSection
           selectedTemplate={selectedTemplate}
           userFormInput={(v: any) => GenerateAIContent(v)}
+          userImageInput={(v: any) => handleGenerate(v)}
           loading={loading}
         />
         {/* outputsection */}
         <div className="col-span-2  ">
           <OutputSection
             AiOutput={aiOutput}
-            ImageOutput={image}
+            imageUrl={imageUrl}
+            imagePrompt={currentPrompt}
             MusicOutput={music} // MusicOutput={music}
           />
         </div>

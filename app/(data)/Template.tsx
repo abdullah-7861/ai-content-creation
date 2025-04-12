@@ -143,37 +143,24 @@ export default [
       },
     ],
   },
-  // {
-  //   name: "Image Generator",
-  //   desc: "An AI tool that Generates Image based on your prompt",
-  //   category: "Image",
-  //   icon: "https://cdn.icon-icons.com/icons2/10/PNG/256/imagemapofpixels_theimage_image_1555.png",
-  //   slug: "image-generation",
-  //   aiPrompt: "Generate Image based on imageprompt, quantity and resolution provided.",
-  //   form: [
-  //     {
-  //       label: "Turn Your prompt into Image",
-  //       field: "textarea",
-  //       name: "imageprompt",
-  //       required: true,
-  //       defaultvalue: "",
-  //     },
-  //     {
-  //       label: "Select Quantity here",
-  //       field: "Select",
-  //       name: "quantity",
-  //       defaultvalue: "1",
-  //       options: ["1", "2", "3", "4", "5"],
-  //     },
-  //     {
-  //       label: "Select Resolution here",
-  //       field: "Select",
-  //       name: "resolution",
-  //       defaultvalue: "512x512",
-  //       options: ["256x256","512x512","1024x1024"],
-  //     },
-  //   ],
-  // },
+  {
+    name: "Image Generator",
+    desc: "An AI tool that Generates Image based on your prompt",
+    category: "Image",
+    icon: "https://cdn.icon-icons.com/icons2/10/PNG/256/imagemapofpixels_theimage_image_1555.png",
+    slug: "image-generation",
+    aiPrompt: "Generate Image based on imageprompt, quantity and resolution provided.",
+    form: [
+      {
+        label: "Turn Your prompt into Image",
+        field: "textarea",
+        name: "imageprompt",
+        required: true,
+        defaultvalue: "",
+      },
+      
+    ],
+  },
   // {
   //   name: "Video Generator",
   //   desc: "An AI tool that Generates Videos based on your prompt",
