@@ -3,7 +3,8 @@ import GenRemove from "./gen-remove";
 import BgRemove from "./bg-remove";
 import BackgroundReplace from "./bg-replace";
 import GenerativeFill from "./generative-fill";
-import ExtractPart from "./extract-parts";
+// import ExtractPart from "./extract-parts";
+import ExportAsset from "./export-image";
 
 export default function ImageTools() {
   return (
@@ -12,7 +13,8 @@ export default function ImageTools() {
       <BgRemove />
       <BackgroundReplace />
       <GenerativeFill />
-      <ExtractPart />
+      {/* <ExtractPart /> */}
+
     </>
   );
 }

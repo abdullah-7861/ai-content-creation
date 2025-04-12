@@ -50,7 +50,7 @@ export default function UploadForm() {
               size={36}
             />
           </Card>
-          <Card
+          {/* <Card
             onClick={(e) => setSelectedType("video")}
             className={cn(
               "flex flex-col items-center justify-center p-4 gap-4 cursor-pointer",
@@ -72,7 +72,7 @@ export default function UploadForm() {
               className={`${selectedType === "video" ? "text-primary" : null}`}
               size={36}
             />
-          </Card>
+          </Card> */}
         </RadioGroup>
       </div>
     )

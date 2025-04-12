@@ -13,6 +13,8 @@ import { AIOutput } from "@/utils/schema";
 import { useUser } from "@clerk/clerk-react";
 import moment from "moment";
 import openai from "@/utils/ImageGen";
+import axios from "axios";
+import router, { Router } from "next/router";
 
 interface PROPS {
   params: {
@@ -29,32 +31,32 @@ function CreatNewContent(props: PROPS) {
 
   const [aiOutput, setAiOutput] = useState<string>("");
   const [image, setImage] = useState<string>("");
-  const [music, setMusic] = useState<string>("");
+  const [music, setMusic] = useState<string>();
   const [prompt, setPrompt] = useState<string>("90's rap");
 
   const { user } = useUser();
 
-  // const GenerateAIContent = async (formData: any) => {
-  //   console.log(formData)
-  //   setLoading(true);
+  const GenerateAIContent = async (formData: any) => {
+    console.log(formData);
+    setLoading(true);
 
-  //   const selectedPrompt = selectedTemplate?.aiPrompt;
-  //   const FinalAIPrompt = JSON.stringify(formData) + "," + selectedPrompt;
-  //   const result = await chatSession.sendMessage(FinalAIPrompt);
-  //   // console.log(result.response.text());
-  //   setAiOutput(result.response.text());
-  //   await SaveInDb(
-  //     JSON.stringify(formData),
-  //     selectedTemplate?.slug,
-  //     result.response.text()
-  //   );
-  //   setLoading(false);
-  // };
+    const selectedPrompt = selectedTemplate?.aiPrompt;
+    const FinalAIPrompt = JSON.stringify(formData) + "," + selectedPrompt;
+    const result = await chatSession.sendMessage(FinalAIPrompt);
+    // console.log(result.response.text());
+    setAiOutput(result.response.text());
+    await SaveInDb(
+      JSON.stringify(formData),
+      selectedTemplate?.slug,
+      result.response.text()
+    );
+    setLoading(false);
+  };
 
   // Client-side fetch in your `page.tsx`
 
-  // const generateImages = async (formData: any) => {
-  //   // console.log(formData);
+  // const generateMusic = async (formData: any) => {
+  //   console.log(formData);
   //   try {
   //     setImage([]);
   //     const response = await axios.post("/api/image", formData);
@@ -85,33 +87,75 @@ function CreatNewContent(props: PROPS) {
   //   }
   // };
 
-  const generateImages = async (formData: any) => {
-    try {
-      setLoading(true);
-      const response = await fetch("/api/music", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          prompt: prompt,
-        }),
-      });
-        
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+  // const generateImages = async (formData: any) => {
+  //   console.log(formData);
+  //   // try {
+  //   //   setLoading(true);
+  //   //   const response = await fetch("/api/music", {
+  //   //     method: "POST",
+  //   //     headers: {
+  //   //       "Content-Type": "application/json",
+  //   //     },
+  //   //     body: JSON.stringify({
+  //   //       prompt: prompt,
+  //   //     }),
+  //   //   });
 
-      const data = await response.json();
-      setMusic(data.audio);
-      // setImage(data);
-    } catch (error) {
-      console.log("error:", error);
-    } finally {
-      setLoading(false);
-      setPrompt("");
-    }
-  };
+  //   //   if (!response.ok) {
+  //   //     throw new Error(`HTTP error! status: ${response.status}`);
+  //   //   }
+
+  //   //   const data = await response.json();
+  //   //   setMusic(data.audio);
+  //   //   // setImage(data);
+  //   // } catch (error) {
+  //   //   console.log("error:", error);
+  //   // } finally {
+  //   //   setLoading(false);
+  //   //   setPrompt("");
+  //   // }
+  // };
+
+  // const handleGenerateAudio = async (formData: any) => {
+  //   console.log(formData);
+  //   // if (!formData) {
+  //   //   alert("Please enter a prompt");
+  //   //   return;
+  //   // }
+
+  //   try {
+  //     const response = await fetch("/api/music", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ prompt: formData.musicprompt }),
+  //     });
+
+  //     const data = await response.json();
+  //     if (data.audioUrl) {
+  //       setMusic(data.audioUrl);
+  //       console.log("this is music ", music);
+  //     } else {
+  //       console.error("No audio URL returned");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error generating audio:", error);
+  //     alert("An error occurred. Please try again.");
+  //   }
+  // };
+
+  // const onSubmit = async (FormData: any) => {
+  //   try {
+  //     setMusic(undefined);
+  //     console.log(FormData.musicprompt);
+  //     const response = await axios.post("/api/music", {
+  //       prompt: FormData.musicprompt,
+  //     });
+  //     console.log("this is response on client side", response);
+  //     // setMusic(response.data.audio);
+  //   } catch (error: any) {
+  //     console.log("eeror occur", error);
+  //   }
+  // };
 
   const SaveInDb = async (formData: any, slug: any, aiOutput: string) => {
     const result = await db.insert(AIOutput).values({
@@ -136,12 +180,16 @@ function CreatNewContent(props: PROPS) {
         {/* formsection */}
         <FormSection
           selectedTemplate={selectedTemplate}
-          userFormInput={(v: any) => generateImages(v)}
+          userFormInput={(v: any) => GenerateAIContent(v)}
           loading={loading}
         />
         {/* outputsection */}
         <div className="col-span-2  ">
-          <OutputSection AiOutput={aiOutput} ImageOutput={image} MusicOutput={music} />
+          <OutputSection
+            AiOutput={aiOutput}
+            ImageOutput={image}
+            MusicOutput={music} // MusicOutput={music}
+          />
         </div>
       </div>
     </div>

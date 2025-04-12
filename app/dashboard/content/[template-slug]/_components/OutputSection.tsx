@@ -6,19 +6,26 @@ import { Copy, DownloadIcon } from "lucide-react";
 import { Card, CardFooter } from "@/components/ui/card";
 import Image from "next/image";
 
+import { useParams, usePathname } from "next/navigation";
+
 interface props {
   AiOutput: string;
   ImageOutput: string;
-  MusicOutput:string
+  MusicOutput: any;
 }
 
 function OutputSection({ AiOutput, ImageOutput, MusicOutput }: props) {
   const editorRef: any = useRef(); // using to get access to the the html componenet or element
 
+  const add = usePathname();
+  // console.log(add)
+
   useEffect(() => {
     // const editorInstance = editorRef.current.getInstance();
     // editorInstance.setMarkdown(AiOutput); // putting value inside the output section
   }, [AiOutput]);
+
+  console.log("tis is music response on outputpage", MusicOutput);
 
   return (
     <div className="bg-white shadow-lg border rounded-lg  min-h-full ">
@@ -33,38 +40,21 @@ function OutputSection({ AiOutput, ImageOutput, MusicOutput }: props) {
         </Button>
       </div>
       <hr />
-      {AiOutput === "d" ? (
-        <div className="bg-white  p-5 whitespace-pre-wrap">{AiOutput}</div>
-      ) : ImageOutput === "d" ? (
-        <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8 p-5 pb-10">
-          <Card className="rounded-lg overflow-hidden">
-            <div className="relative aspect-square">
-              <Image
-                src={ImageOutput}
-                alt="Failed To load Image"
-                width={200}
-                height={200}
-              />
-            </div>
-            <CardFooter className="p-2">
-              <Button
-                onClick={() => window.open("/music-note.png")}
-                className="w-full bg-purple-600  gap-2  hover:bg-purple-500"
-              >
-                <DownloadIcon className=" w-5 h-5 " />
-                Download
-              </Button>
-            </CardFooter>
-          </Card>
+
+      {add === "/dashboard/content/music-generation" ? (
+        <div>
+          <audio controls>
+            <source src={MusicOutput} />
+          </audio>
         </div>
       ) : (
-        <div>
-          {/* <audio controls className="w-full mt-8">
-            <source src={MusicOutput} />
-
-          </audio> */}
-        </div>
+        <div className="bg-white  p-5 whitespace-pre-wrap">{AiOutput}</div>
+        // <div
+        //   className="bg-white p-5"
+        //   dangerouslySetInnerHTML={{ __html: sanitizedHTML }}
+        // />
       )}
+
       {/* 
       <Editor
         ref={editorRef} // taking reference of <Editor/ > component to access
