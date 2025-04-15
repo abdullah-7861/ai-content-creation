@@ -77,6 +77,7 @@ function OutputSection({
       <hr />
 
       {add === "/dashboard/content/music-generation" ? (
+        
         <div>
           <audio controls>
             <source src={MusicOutput} />
@@ -87,7 +88,7 @@ function OutputSection({
           <div className="relative aspect-square">
             <img
               src={imageUrl}
-              alt={imagePrompt}
+              alt="your Image will show here"
               className="w-full h-full object-cover"
             />
           </div>

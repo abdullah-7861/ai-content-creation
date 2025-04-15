@@ -3,9 +3,11 @@
  */
 
 // Stable Diffusion v1.5 model ID
-const MODEL_ID = "runwayml/stable-diffusion-v1-5";
+const MODEL_ID = "stabilityai/stable-diffusion-xl-base-1.0";
 const API_URL = `https://api-inference.huggingface.co/models/${MODEL_ID}`;
-
+// stabilityai/stable-diffusion-xl-base-1.0
+//HiDream-ai/HiDream-I1-Full
+//HiDream-ai/HiDream-I1-Dev
 // Function to generate an image using Stable Diffusion
 export async function generateImage(
   prompt: string,
