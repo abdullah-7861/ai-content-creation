@@ -12,7 +12,7 @@ import { db } from "@/utils/db";
 import { AIOutput } from "@/utils/schema";
 import { useUser } from "@clerk/clerk-react";
 import moment from "moment";
-import openai from "@/utils/ImageGen";
+// import openai from "@/utils/ImageGen";
 import axios from "axios";
 import router, { Router } from "next/router";
 import { toast } from "sonner";
@@ -23,7 +23,8 @@ interface PROPS {
     "template-slug": string;
   };
 }
-const apiKey = "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";
+// const apiKey = "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";
+const apiKey = "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";
 
 function CreatNewContent(props: PROPS) {
   const selectedTemplate: TEMPLATE | undefined = Template?.find(

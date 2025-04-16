@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import cloudinary from "cloudinary";
+import { UploadApiResponse, v2 as cloudinary } from "cloudinary";
 import { checkImageProcessing } from "@/lib/check-processing";
 
-cloudinary.v2.config({
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-  cname: process.env.CLOUDINARY_NAME,
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_KEY,
+  api_secret: process.env.CLOUDINARY_SECRET,
 });
 
 export async function GET(request: NextRequest) {

@@ -179,23 +179,23 @@ export default [
 
   //   ],
   // },
-  {
-    name: "Music Generator",
-    desc: "An AI tool that Generates Musics based on your prompt",
-    category: "Music",
-    icon: "https://cdn.icon-icons.com/icons2/37/PNG/512/note_audio_music_3097.png ",
-    slug: "music-generation",
-    aiPrompt: "Generate Music based on prompt",
-    form: [
-      {
-        label: "Turn Your prompt into Music",
-        field: "textarea",
-        name: "musicprompt",
-        required: true,
-        defaultvalue: "",
-      },
-    ],
-  },
+  // {
+  //   name: "Music Generator",
+  //   desc: "An AI tool that Generates Musics based on your prompt",
+  //   category: "Music",
+  //   icon: "https://cdn.icon-icons.com/icons2/37/PNG/512/note_audio_music_3097.png ",
+  //   slug: "music-generation",
+  //   aiPrompt: "Generate Music based on prompt",
+  //   form: [
+  //     {
+  //       label: "Turn Your prompt into Music",
+  //       field: "textarea",
+  //       name: "musicprompt",
+  //       required: true,
+  //       defaultvalue: "",
+  //     },
+  //   ],
+  // },
   // {
   //   name: "Code Generator",
   //   desc: "An AI tool that Generates Code based on your prompt",

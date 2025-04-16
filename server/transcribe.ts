@@ -19,6 +19,12 @@ async function checkTranscriptionStatus(publicId: string): Promise<string> {
     const result = await cloudinary.api.resource(publicId, {
       resource_type: "video",
     });
+
+    console.log(
+      "Full Cloudinary result.info:",
+      JSON.stringify(result.info, null, 2)
+    );
+
     if (
       result.info &&
       result.info.raw_convert &&
@@ -26,7 +32,8 @@ async function checkTranscriptionStatus(publicId: string): Promise<string> {
     ) {
       return result.info.raw_convert.google_speech.status;
     }
-    return "pending"; // Assume pending if we can't find status
+
+    return "pending"; // If structure isn't there, assume it's still processing
   } catch (error) {
     console.error("Error checking transcription status:", error);
     throw new Error("Failed to check transcription status");
@@ -53,13 +60,15 @@ export const initiateTranscription = actionClient
   .action(async ({ parsedInput: { publicId } }) => {
     console.log("Initiating transcription for:", publicId);
     try {
-      // Initiate transcription
-      await cloudinary.api.update(publicId, {
+      // Start transcription with Google Speech
+      const updateResult = await cloudinary.api.update(publicId, {
         resource_type: "video",
         raw_convert: "google_speech",
       });
 
-      // Poll for completion
+      console.log("Cloudinary transcription initiation result:", updateResult);
+      console.log("info:", updateResult?.info?.raw_convert?.google_speech);
+
       const maxAttempts = 20;
       const delay = 2000;
       let status = "pending";
@@ -78,12 +87,12 @@ export const initiateTranscription = actionClient
         await new Promise((resolve) => setTimeout(resolve, delay));
       }
 
-      return { error: "Transcription timed out" };
+      return { error: "Transcription timed out after multiple attempts" };
     } catch (error) {
       console.error("Error in transcription process:", error);
       return {
         error:
-          "Error in transcription process: " +
+          "Transcription failed: " +
           (error instanceof Error ? error.message : String(error)),
       };
     }
