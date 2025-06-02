@@ -31,13 +31,9 @@ function SideNav() {
 
   return (
     <div className="h-screen p-5  shadow-sm border bg-white">
-      <Link href={'/'}>
-      <div className="flex justify-center ">
-      <Image src={"/logo.svg"} alt="logo" width={120} height={100} />
-      </div>
-      </Link>
-      <hr className="my-5 mb-6 border" />
-      <div className="mt-3">
+      
+      
+      <div className="mt-14">
         {MenuList.map((menu, index) => (
           <Link href={menu.path}>
           <div

@@ -45,14 +45,14 @@ export default function MusicGenerator() {
         onChange={(e) => setPrompt(e.target.value)}
       />
 
-      <p className="my-2">
+      <div className="my-2">
         Prompt Suggestions: 
         <ul>"128 BPM tech house drum loop"</ul>
         <ul>"funky synth solo"</ul>
         <ul>"Soft Piano music"</ul>
         <ul>"90's rap"</ul>
         
-      </p>
+      </div>
       <button
         onClick={handleGenerate}
         disabled={isGenerating || !prompt.trim()}

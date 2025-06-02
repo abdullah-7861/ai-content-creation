@@ -8,6 +8,9 @@ const isProtectedRoute = createRouteMatcher([
     '/dashboard(.*)',
     '/resume',
     '/Editor',
+    '/music-gen',
+    '/video',
+
         ]);
 
 export const config = {

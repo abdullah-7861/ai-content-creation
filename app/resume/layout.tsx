@@ -6,6 +6,7 @@ import { Loader2Icon, LogOut, UserIcon } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { SignOutButton } from "@clerk/clerk-react";
+import Header from "../dashboard/_components/Header";
 
 function layout({
   children,
@@ -15,7 +16,8 @@ function layout({
   const [click, setClick] = useState(false);
   return (
     <div>
-      <div id="no-print" className=" py-4 px-16 shadow-sm border-b-2 flex justify-between items-center bg-white ">
+      <Header/>
+      {/* <div id="no-print" className=" py-4 px-16 shadow-sm border-b-2 flex justify-between items-center bg-white ">
         <a href="/">
           <Image src={"/logo.svg"} alt="logo" width={120} height={100} />
         </a>
@@ -30,7 +32,7 @@ function layout({
             <LogOut />
           </Button>
         </div>
-      </div>
+      </div> */}
       {children}
     </div>
   );

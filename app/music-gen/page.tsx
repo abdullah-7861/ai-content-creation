@@ -3,8 +3,9 @@ import MusicGenerator from "./_components/MusicGenerator";
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-indigo-900 via-purple-900 to-blue-900 p-4">
-      <header className="mb-8">
+    
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-indigo-900 via-purple-900 to-blue-900 p-4 ">
+      <header className="mb-8 mt-10">
         <h1 className="text-5xl font-bold text-white tracking-tight mb-2 text-center">
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-blue-300">
             Audio Genesis

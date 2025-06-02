@@ -196,21 +196,21 @@ export default [
   //     },
   //   ],
   // },
-  // {
-  //   name: "Code Generator",
-  //   desc: "An AI tool that Generates Code based on your prompt",
-  //   category: "Code",
-  //   icon: "https://cdn.icon-icons.com/icons2/2104/PNG/512/code_icon_129148.png",
-  //   slug: "code-generation",
-  //   aiPrompt: "Generate code based on prior statement in rich text editor format. keep explaination minimum.",
-  //   form: [
-  //     {
-  //       label: "Generate Code using decriptive text",
-  //       field: "textarea",
-  //       name: "codeprompt",
-  //       required: true,
-  //       defaultvalue: "",
-  //     },
-  //   ],
-  // },
+  {
+    name: "Code Generator",
+    desc: "An AI tool that Generates Code based on your prompt",
+    category: "Code",
+    icon: "https://cdn.icon-icons.com/icons2/2104/PNG/512/code_icon_129148.png",
+    slug: "code-generation",
+    aiPrompt: "Generate code based on prior statement in rich text editor format. keep explaination minimum.",
+    form: [
+      {
+        label: "Generate Code using decriptive text",
+        field: "textarea",
+        name: "codeprompt",
+        required: true,
+        defaultvalue: "",
+      },
+    ],
+  },
 ];
