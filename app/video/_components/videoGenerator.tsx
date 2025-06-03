@@ -2,12 +2,14 @@
 
 import React, { useState } from "react";
 import { generateVideo } from "@/server/generateVideo";
+import { useRouter } from "next/navigation";
 
 const VideoGenerator = () => {
   const [prompt, setPrompt] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState("");
+  const router = useRouter();
 
   const handleGenerate = async () => {
     setIsGenerating(true);
@@ -23,6 +25,7 @@ const VideoGenerator = () => {
       setError(err.message || "Something went wrong while generating video");
     } finally {
       setIsGenerating(false);
+      router.refresh();
     }
   };
 

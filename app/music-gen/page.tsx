@@ -1,9 +1,11 @@
-"use client";
 import MusicGenerator from "./_components/MusicGenerator";
 
-const Index = () => {
+import { getGenLimit } from "../api/generate-limit/route";
+import FreeCounter from "./_components/FreeCounter";
+
+const Index = async () => {
+  const userGenerationLimit = await getGenLimit();
   return (
-    
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-indigo-900 via-purple-900 to-blue-900 p-4 ">
       <header className="mb-8 mt-10">
         <h1 className="text-5xl font-bold text-white tracking-tight mb-2 text-center">
@@ -21,10 +23,7 @@ const Index = () => {
       </main>
 
       <footer className="mt-12 text-center text-sm text-purple-300">
-        <p>Powered by AI Content Creation FYP</p>
-        <p className="mt-1 text-purple-400/70">
-          © {new Date().getFullYear()} Audio Genesis
-        </p>
+        <FreeCounter userGenerationLimit={userGenerationLimit} />
       </footer>
     </div>
   );

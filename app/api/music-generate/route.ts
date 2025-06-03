@@ -1,4 +1,6 @@
+
 import { NextResponse } from "next/server";
+import { CheckGenerationLimit, increaseGenerationLimit } from "../generate-limit/route";
 
 export async function POST(req: Request) {
   const body = await req.json();
@@ -6,6 +8,16 @@ export async function POST(req: Request) {
 
   if (!prompt || typeof prompt !== "string") {
     return NextResponse.json({ error: "Prompt is required" }, { status: 400 });
+  }
+
+  const freeTrial = await CheckGenerationLimit();
+  // console.log("free trial", freeTrial)
+  if (!freeTrial) {
+    // console.log("free trial has expired,");
+    return NextResponse.json(
+      { error: "Free Trial Has Expire." },
+      { status: 403 }
+    );
   }
 
   try {
@@ -31,6 +43,9 @@ export async function POST(req: Request) {
       }),
     });
 
+    // If free credits, then increment them by 1
+    await increaseGenerationLimit();
+    
     const prediction = await predictionRes.json();
 
     // Log raw prediction response to check its structure

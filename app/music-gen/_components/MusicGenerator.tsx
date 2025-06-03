@@ -2,12 +2,15 @@
 
 import React, { useState } from "react";
 import { generateMusic } from "@/server/api";
+import { useRouter } from "next/navigation";
+
 
 export default function MusicGenerator() {
   const [prompt, setPrompt] = useState("");
   const [audioUrl, setAudioUrl] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState("");
+  const router = useRouter()
 
   const handleGenerate = async () => {
     setIsGenerating(true);
@@ -28,6 +31,7 @@ export default function MusicGenerator() {
       setError(err.message || "Something went wrong while generating music");
     } finally {
       setIsGenerating(false);
+      router.refresh();
     }
   };
 
